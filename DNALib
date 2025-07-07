@@ -1,0 +1,73 @@
+public class DNALib {
+
+    public static boolean validator(String dna) {
+        dna = dna.toUpperCase();
+        if (dna.isEmpty() || dna.length() % 3 != 0) {
+            return false;
+        }
+        return validatorHelper(dna, 0);
+    }
+
+    private static boolean validatorHelper(String dna, int index) {
+        if (index == dna.length()) return true;
+        char c = dna.charAt(index);
+        if (c != 'A' && c != 'C' && c != 'G' && c != 'T') return false;
+        return validatorHelper(dna, index + 1);
+    }
+
+    public static String reverser(String dna) {
+        if (dna.length() <= 1) return dna;
+        return reverser(dna.substring(1)) + dna.charAt(0);
+    }
+
+    public static String inverser(String dna) {
+        if (dna.isEmpty()) return "";
+        char c = dna.charAt(0);
+        char converted;
+        switch (c) {
+            case 'A': converted = 'T'; break;
+            case 'T': converted = 'A'; break;
+            case 'C': converted = 'G'; break;
+            case 'G': converted = 'C'; break;
+            default: converted = c; break; // shouldn't occur if input is validated
+        }
+        return converted + inverser(dna.substring(1));
+    }
+
+    public static String translator(String dna) {
+        if (dna.length() < 3) return "";
+        String codon = dna.substring(0, 3);
+        String amino = translateCodon(codon);
+        return amino + translator(dna.substring(3));
+    }
+
+    private static String translateCodon(String codon) {
+        switch (codon) {
+            case "AAA": case "AAG": return "K";
+            case "AAC": case "AAT": return "N";
+            case "ACA": case "ACC": case "ACG": case "ACT": return "T";
+            case "AGA": case "AGG": return "R";
+            case "AGC": case "AGT": return "S";
+            case "ATA": case "ATC": case "ATT": return "I";
+            case "ATG": return "M";
+            case "CAA": case "CAG": return "Q";
+            case "CAC": case "CAT": return "H";
+            case "CCA": case "CCC": case "CCG": case "CCT": return "P";
+            case "CGA": case "CGC": case "CGG": case "CGT": return "R";
+            case "CTA": case "CTC": case "CTG": case "CTT":
+            case "TTA": case "TTG": return "L";
+            case "GAA": case "GAG": return "E";
+            case "GAC": case "GAT": return "D";
+            case "GCA": case "GCC": case "GCG": case "GCT": return "A";
+            case "GGA": case "GGC": case "GGG": case "GGT": return "G";
+            case "GTA": case "GTC": case "GTG": case "GTT": return "V";
+            case "TAA": case "TAG": case "TGA": return "-";
+            case "TAC": case "TAT": return "Y";
+            case "TCA": case "TCC": case "TCG": case "TCT": return "S";
+            case "TGC": case "TGT": return "C";
+            case "TGG": return "W";
+            case "TTC": case "TTT": return "F";
+            default: return "?"; // Shouldn't happen if validator is correct
+        }
+    }
+}
